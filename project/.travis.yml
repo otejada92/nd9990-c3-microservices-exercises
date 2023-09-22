@@ -1,0 +1,20 @@
+language: node_js
+node_js:
+  - 12
+
+services:
+  - docker
+script:
+  - docker tag udagram-api-feed otejada/udagram-api-user:v1
+  - docker tag udagram-api-feed otejada/udagram-api-feed:v1
+  - docker tag udagram-api-feed otejada/reverseproxy:v1
+  - docker tag udagram-api-feed otejada/udagram-frontend:v1
+
+after_success:
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+  - docker push otejada/udagram-api-feed:v1
+  - docker push otejada/udagram-api-user:v1
+  - docker push otejada/reverseproxy:v1
+  - docker push otejada/udagram-frontend:v1
+
+
